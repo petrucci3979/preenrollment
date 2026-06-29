@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>선수강 신청 제도 폐지 장단점 분석</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="deck_stage.js"></script>
+<style>
+  :root{
+    --ink:#1a1d24;
+    --paper:#f5f1e8;
+    --paper-2:#ede7d8;
+    --navy:#1a2b4a;
+    --navy-2:#2c3f5f;
+    --accent:#b34a1e;       /* terracotta */
+    --danger:#a01f1f;
+    --positive:#1f6f54;
+    --warn:#b88a1a;
+    --muted:#6b6b6b;
+    --rule:#cdbf9e;
+    --rule-dark:#3a3326;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#0a0a0a;font-family:'Noto Sans KR',sans-serif;color:var(--ink)}
+  deck-stage{--deck-bg:#0a0a0a}
+
+  section{
+    width:1920px;height:1080px;
+    background:var(--paper);
+    color:var(--ink);
+    padding:80px 110px;
+    position:relative;
+    overflow:hidden;
+    font-feature-settings:"palt";
+    letter-spacing:-0.01em;
+  }
+  .serif{font-family:'Noto Serif KR',serif}
+  .mono{font-family:'JetBrains Mono',monospace}
+
+  /* ============ Common header ============ */
+  .chrome{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    border-bottom:2px solid var(--rule-dark);
+    padding-bottom:18px;margin-bottom:48px;
+  }
+  .chrome .doc-id{
+    font-family:'JetBrains Mono',monospace;
+    font-size:14px;letter-spacing:0.15em;
+    color:var(--muted);text-transform:uppercase;
+  }
+  .chrome .pill{
+    display:inline-block;
+    padding:6px 14px;
+    background:var(--navy);color:var(--paper);
+    font-size:14px;letter-spacing:0.18em;
+    font-weight:500;
+  }
+  .chrome .crumb{
+    font-size:18px;color:var(--navy);font-weight:500;
+  }
+  .footer{
+    position:absolute;left:110px;right:110px;bottom:46px;
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:13px;color:var(--muted);letter-spacing:0.1em;
+    border-top:1px solid var(--rule);padding-top:14px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .footer .seal{
+    width:36px;height:36px;border:1.5px solid var(--rule-dark);border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-family:'Noto Serif KR',serif;font-weight:700;font-size:14px;color:var(--rule-dark);
+    position:absolute;left:50%;top:-18px;transform:translateX(-50%);
+    background:var(--paper);
+  }
+
+  /* ============ Slide-specific ============ */
+  h1.title{
+    font-family:'Noto Serif KR',serif;
+    font-weight:900;
+    font-size:118px;
+    line-height:1.08;
+    letter-spacing:-0.04em;
+    color:var(--navy);
+  }
+  h2.section-title{
+    font-family:'Noto Serif KR',serif;
+    font-weight:700;
+    font-size:72px;
+    line-height:1.15;
+    color:var(--navy);
+    letter-spacing:-0.03em;
+  }
+  h3.sub{
+    font-family:'Noto Serif KR',serif;
+    font-weight:600;
+    font-size:34px;color:var(--navy);
+    letter-spacing:-0.02em;
+  }
+  .lede{
+    font-size:26px;line-height:1.6;color:#2a2a2a;
+    max-width:1500px;
+  }
+  .body{
+    font-size:22px;line-height:1.7;color:#262626;
+  }
+  .small{font-size:18px;line-height:1.65;color:#3a3a3a}
+
+  /* Cover */
+  .cover{
+    display:flex;flex-direction:column;justify-content:space-between;
+    background:
+      radial-gradient(circle at 92% 10%, rgba(179,74,30,0.08), transparent 40%),
+      linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+  }
+  .cover .topbar{
+    display:flex;justify-content:space-between;align-items:flex-start;
+  }
+  .cover .stamp{
+    width:160px;height:160px;border:2.5px solid var(--accent);
+    border-radius:50%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    color:var(--accent);
+    font-family:'Noto Serif KR',serif;
+    transform:rotate(-8deg);
+  }
+  .cover .stamp .big{font-size:34px;font-weight:900;letter-spacing:0.1em}
+  .cover .stamp .sm{font-size:14px;letter-spacing:0.3em;margin-top:4px}
+
+  .cover .meta-row{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:40px;
+    border-top:2px solid var(--rule-dark);padding-top:32px;
+  }
+  .meta-row .kv .k{
+    font-family:'JetBrains Mono',monospace;font-size:12px;
+    color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .meta-row .kv .v{
+    font-family:'Noto Serif KR',serif;font-size:22px;font-weight:600;color:var(--navy);
+  }
+
+  /* Pros/Cons blocks */
+  .card{
+    border:1.5px solid var(--rule-dark);
+    background:#fbf8ef;
+    padding:32px 36px;
+    position:relative;
+  }
+  .card .num{
+    position:absolute;top:-18px;left:28px;
+    background:var(--navy);color:var(--paper);
+    font-family:'Noto Serif KR',serif;font-weight:700;
+    padding:4px 14px;font-size:18px;letter-spacing:0.1em;
+  }
+  .card.positive{border-color:var(--positive);background:#f1f7f3}
+  .card.positive .num{background:var(--positive)}
+  .card.negative{border-color:var(--danger);background:#faf0ee}
+  .card.negative .num{background:var(--danger)}
+  .card.warn{border-color:var(--warn);background:#faf5e6}
+  .card.warn .num{background:var(--warn)}
+
+  .card h4{
+    font-family:'Noto Serif KR',serif;font-size:28px;font-weight:700;
+    color:var(--navy);margin-bottom:14px;letter-spacing:-0.02em;
+  }
+  .card.positive h4{color:#155039}
+  .card.negative h4{color:#7a1717}
+
+  .card ul, .body ul{list-style:none;padding:0}
+  .card li, .body li{
+    font-size:19px;line-height:1.65;color:#2a2a2a;
+    padding-left:22px;position:relative;margin-bottom:6px;
+  }
+  .card li::before, .body li::before{
+    content:"";position:absolute;left:0;top:13px;
+    width:10px;height:2px;background:var(--accent);
+  }
+  .card.positive li::before{background:var(--positive)}
+  .card.negative li::before{background:var(--danger)}
+
+  /* Big tag */
+  .tag{
+    display:inline-block;padding:8px 18px;
+    background:var(--navy);color:var(--paper);
+    font-size:18px;font-weight:500;letter-spacing:0.1em;
+    margin-right:8px;
+  }
+  .tag.danger{background:var(--danger)}
+  .tag.positive{background:var(--positive)}
+  .tag.outline{background:transparent;color:var(--navy);border:1.5px solid var(--navy)}
+
+  /* Quote / callout */
+  .callout{
+    border-left:6px solid var(--accent);
+    background:#fbf6ec;
+    padding:24px 32px;
+    font-size:22px;line-height:1.7;color:#2a2a2a;
+  }
+  .callout.danger{border-color:var(--danger);background:#faf0ee}
+  .callout.navy{border-color:var(--navy);background:#eef1f8}
+
+  /* Table */
+  table.eval{
+    width:100%;border-collapse:collapse;
+    font-size:22px;
+  }
+  table.eval th, table.eval td{
+    padding:18px 24px;text-align:left;
+    border-bottom:1px solid var(--rule);
+  }
+  table.eval thead th{
+    background:var(--navy);color:var(--paper);
+    font-family:'Noto Serif KR',serif;font-weight:600;font-size:20px;
+    letter-spacing:0.05em;
+    border-bottom:none;
+  }
+  table.eval tbody tr:nth-child(odd){background:#fbf8ef}
+  .pos-tag{
+    display:inline-block;padding:4px 14px;font-size:16px;font-weight:600;
+    background:#1f6f54;color:#fff;
+  }
+  .neg-tag{
+    display:inline-block;padding:4px 14px;font-size:16px;font-weight:600;
+    background:#a01f1f;color:#fff;
+  }
+  .warn-tag{
+    display:inline-block;padding:4px 14px;font-size:16px;font-weight:600;
+    background:#b88a1a;color:#fff;
+  }
+
+  /* Flow diagram */
+  .flow{
+    display:flex;flex-direction:column;gap:8px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:18px;color:var(--ink);
+  }
+  .flow .step{
+    background:#fff;border:1.5px solid var(--rule-dark);
+    padding:12px 18px;display:inline-block;
+  }
+  .flow .step.miss{background:#faf0ee;border-color:var(--danger);color:var(--danger);font-weight:700}
+  .flow .step.ok{background:#f1f7f3;border-color:var(--positive);color:var(--positive)}
+  .flow .arrow{color:var(--muted);text-align:center;padding-left:24px;font-size:22px;line-height:1}
+
+  /* Slide numbering decoration */
+  .slide-no{
+    position:absolute;top:80px;right:110px;
+    font-family:'Noto Serif KR',serif;
+    font-size:120px;font-weight:900;
+    color:rgba(26,43,74,0.07);
+    line-height:1;letter-spacing:-0.05em;
+  }
+
+  /* TOC */
+  .toc-list{
+    display:grid;grid-template-columns:1fr 1fr;gap:20px 60px;
+    margin-top:30px;
+  }
+  .toc-item{
+    display:flex;align-items:baseline;gap:20px;
+    padding:18px 0;border-bottom:1px dashed var(--rule);
+  }
+  .toc-item .n{
+    font-family:'JetBrains Mono',monospace;
+    font-size:22px;color:var(--accent);font-weight:600;
+    min-width:60px;
+  }
+  .toc-item .t{
+    font-family:'Noto Serif KR',serif;font-size:26px;color:var(--navy);font-weight:500;
+    flex:1;
+  }
+  .toc-item .p{
+    font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--muted);
+  }
+
+  /* Two-col layouts */
+  .cols-2{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+  .cols-3{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+  .cols-4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+
+  /* Scenario */
+  .scenario{
+    border:1.5px solid var(--rule-dark);background:#fff;
+    padding:28px 32px;
+  }
+  .scenario .stitle{
+    font-family:'Noto Serif KR',serif;font-size:24px;font-weight:700;
+    color:var(--navy);margin-bottom:16px;
+    padding-bottom:10px;border-bottom:1px solid var(--rule);
+  }
+  .scenario.s1 .stitle{color:#b88a1a}
+  .scenario.s2 .stitle{color:var(--danger)}
+
+  /* big stat */
+  .stat-row{display:flex;gap:60px;margin-top:30px}
+  .stat .v{
+    font-family:'Noto Serif KR',serif;font-weight:900;
+    font-size:80px;line-height:1;color:var(--accent);letter-spacing:-0.03em;
+  }
+  .stat .l{
+    font-size:16px;color:var(--muted);
+    letter-spacing:0.15em;text-transform:uppercase;
+    font-family:'JetBrains Mono',monospace;margin-top:8px;
+  }
+
+  /* Conclusion */
+  .conclusion-hero{
+    background:var(--navy);color:var(--paper);
+    padding:60px 80px;
+    position:relative;
+  }
+  .conclusion-hero h2{color:var(--paper)}
+  .conclusion-hero .lede{color:#e6dfd0}
+
+</style>
+</head>
+<body>
+<deck-stage>
+
+<!-- =========================================================
+SLIDE 1 - COVER
+========================================================== -->
+<section data-screen-label="01 표지" class="cover">
+  <div class="topbar">
+    <div>
+      <div class="mono" style="font-size:14px;letter-spacing:0.25em;color:var(--muted);margin-bottom:14px">INTERNAL MEMO · 학사기획</div>
+      <div class="serif" style="font-size:22px;color:var(--navy);font-weight:500;letter-spacing:-0.01em">선수강 신청 제도 폐지 검토</div>
+    </div>
+    <div class="stamp">
+      <div class="big">검토</div>
+      <div class="sm">REVIEW</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="mono" style="font-size:18px;color:var(--accent);letter-spacing:0.3em;margin-bottom:30px">PROS · CONS · RISK ANALYSIS</div>
+    <h1 class="title">선수강 신청 제도<br>폐지 장단점 분석</h1>
+    <div style="margin-top:40px;font-size:28px;color:#3a3a3a;line-height:1.5;max-width:1300px" class="serif">
+      행정 효율성과 학생 성공(Student Success), 두 축 사이에서<br>
+      <span style="color:var(--accent);font-weight:600">제도 폐지가 가져올 변화</span>를 다각도로 검토한다.
+    </div>
+  </div>
+
+  <div class="meta-row">
+    <div class="kv">
+      <div class="k">Document</div>
+      <div class="v">교무위원회 검토안</div>
+    </div>
+    <div class="kv">
+      <div class="k">Scope</div>
+      <div class="v">공통교양 / 1학년 필수</div>
+    </div>
+    <div class="kv">
+      <div class="k">Sections</div>
+      <div class="v">장점 4 · 단점 8 · 대안</div>
+    </div>
+    <div class="kv">
+      <div class="k">Status</div>
+      <div class="v">의견 수렴용</div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+SLIDE 2 - 핵심 요약
+========================================================== -->
+<section data-screen-label="02 핵심 요약">
+  <div class="slide-no">00</div>
+  <div class="chrome">
+    <div>
+      <span class="pill">EXECUTIVE SUMMARY</span>
+      <div class="crumb serif" style="margin-top:10px">핵심 요약</div>
+    </div>
+    <div class="doc-id">SEC · 00 / 18</div>
+  </div>
+
+  <h2 class="section-title" style="margin-bottom:40px">행정 효율성은 ↑,<br><span style="color:var(--danger)">학업 경로 관리는 ↓</span></h2>
+
+  <div class="callout navy" style="margin-bottom:40px;font-size:26px">
+    선수강 신청 제도 폐지는 <b>행정 효율성 측면에서는 장점</b>이 있으나,
+    학생의 <b>성공적 학업 관리</b>와 <b>학사 운영 안정성</b> 측면에서는 <b style="color:var(--danger)">상당한 위험요인</b>이 존재한다.
+  </div>
+
+  <div class="callout danger" style="font-size:24px">
+    특히 공통교양이 <b>졸업요건 및 후속 교과목 이수와 연계</b>되어 있는 경우에는,
+    단순히 "학생 선택권 확대"의 문제를 넘어 <b>학업 경로 관리의 약화</b>라는 구조적 문제가 발생할 수 있다.
+  </div>
+
+  <div class="cols-3" style="margin-top:60px">
+    <div class="stat">
+      <div class="v">4</div>
+      <div class="l">제시된 장점</div>
+    </div>
+    <div class="stat">
+      <div class="v" style="color:var(--danger)">8</div>
+      <div class="l">예상 단점·위험요인</div>
+    </div>
+    <div class="stat">
+      <div class="v" style="color:var(--navy)">9</div>
+      <div class="l">종합 평가 항목</div>
+    </div>
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.02</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 3 - 목차
+========================================================== -->
+<section data-screen-label="03 목차">
+  <div class="slide-no">目次</div>
+  <div class="chrome">
+    <div>
+      <span class="pill">TABLE OF CONTENTS</span>
+      <div class="crumb serif" style="margin-top:10px">목차</div>
+    </div>
+    <div class="doc-id">SEC · TOC</div>
+  </div>
+
+  <div class="toc-list">
+    <div class="toc-item"><div class="n">01</div><div class="t">선수강 폐지의 장점 (4가지)</div><div class="p">p.04</div></div>
+    <div class="toc-item"><div class="n">02</div><div class="t">장점에 대한 반론 — 행정업무</div><div class="p">p.05</div></div>
+    <div class="toc-item"><div class="n">03</div><div class="t">장점에 대한 반론 — 절대평가·선택권</div><div class="p">p.06</div></div>
+    <div class="toc-item"><div class="n">04</div><div class="t">선수강 폐지의 단점 (개요)</div><div class="p">p.07</div></div>
+    <div class="toc-item"><div class="n">05</div><div class="t">단점 ① 필수 공통교양 미이수</div><div class="p">p.08</div></div>
+    <div class="toc-item"><div class="n">06</div><div class="t">단점 ② 선수과목 체계 붕괴 (최대 위험)</div><div class="p">p.09</div></div>
+    <div class="toc-item"><div class="n">07</div><div class="t">단점 ③④ 졸업지연 · 민원 변화</div><div class="p">p.10</div></div>
+    <div class="toc-item"><div class="n">08</div><div class="t">단점 ⑤⑥ 학과 업무 · 적응력 저하</div><div class="p">p.11</div></div>
+    <div class="toc-item"><div class="n">09</div><div class="t">단점 ⑦⑧ 중도탈락 · 편입생 경쟁</div><div class="p">p.12</div></div>
+    <div class="toc-item"><div class="n">10</div><div class="t">후속 대안: 외국인 유학생 한정 유지</div><div class="p">p.13</div></div>
+    <div class="toc-item"><div class="n">11</div><div class="t">종합 평가표</div><div class="p">p.14</div></div>
+    <div class="toc-item"><div class="n">12</div><div class="t">결론</div><div class="p">p.15</div></div>
+    <div class="toc-item"><div class="n">13</div><div class="t">교육과정·예산 리스크 ① 숨은 효과 / 시나리오</div><div class="p">p.16</div></div>
+    <div class="toc-item"><div class="n">14</div><div class="t">리스크 ② 누적 미수강자 · 재정 · 대학평가</div><div class="p">p.17</div></div>
+    <div class="toc-item"><div class="n">15</div><div class="t">행정실 의견서 추가 문구</div><div class="p">p.18</div></div>
+    <div class="toc-item"><div class="n">—</div><div class="t" style="color:var(--muted)">자료 끝</div><div class="p">END</div></div>
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.03</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 4 - 폐지의 장점 4가지
+========================================================== -->
+<section data-screen-label="04 폐지의 장점">
+  <div class="slide-no">01</div>
+  <div class="chrome">
+    <div>
+      <span class="pill" style="background:var(--positive)">SECTION 01 · PROS</span>
+      <div class="crumb serif" style="margin-top:10px">1. 선수강 신청 폐지의 <b>장점</b></div>
+    </div>
+    <div class="doc-id">PROS · 04 / 18</div>
+  </div>
+
+  <p class="lede" style="margin-bottom:40px">
+    제도 폐지를 주장하는 측에서 제시되는 네 가지 근거. <b>행정 부담을 줄이고 학생 자율성을 높인다</b>는 논리에 기반한다.
+  </p>
+
+  <div class="cols-2" style="gap:32px 40px">
+
+    <div class="card positive">
+      <div class="num">가</div>
+      <h4>행정업무 경감</h4>
+      <ul>
+        <li>선수강 입력 작업 감소</li>
+        <li>선수과목 이수 여부 수기 확인 업무 감소</li>
+        <li>수강변경 요청 처리 감소</li>
+        <li>교무학사팀 및 교양교육원의 업무 부담 감소</li>
+      </ul>
+    </div>
+
+    <div class="card positive">
+      <div class="num">나</div>
+      <h4>학생 선택권 확대</h4>
+      <ul>
+        <li>학생 스스로 시간표를 설계할 수 있음</li>
+        <li>본인 학습 리듬·생활 패턴에 맞게 분반 선택 가능</li>
+      </ul>
+    </div>
+
+    <div class="card positive">
+      <div class="num">다</div>
+      <h4>절대평가 체계와의 정합성 확보</h4>
+      <ul>
+        <li>성적평가지침 개정으로 절대평가가 실시되는 상황</li>
+        <li>특정 학생에게 비선호 시간대·분반을 강제 배정 시 형평성 논란 발생 가능</li>
+        <li>폐지 시 학생이 직접 선택하므로 불만 감소 기대</li>
+      </ul>
+    </div>
+
+    <div class="card positive">
+      <div class="num">라</div>
+      <h4>수강신청 책임의 학생 전환</h4>
+      <ul>
+        <li>학사관리 책임을 학생 스스로 부담</li>
+        <li>자기 주도 학습, 대학 적응력 향상 측면에서 긍정적</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.04</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 5 - 반론 1: 행정업무 경감 효과
+========================================================== -->
+<section data-screen-label="05 반론 행정업무">
+  <div class="slide-no">반론</div>
+  <div class="chrome">
+    <div>
+      <span class="pill" style="background:var(--accent)">COUNTERPOINT 01</span>
+      <div class="crumb serif" style="margin-top:10px">위 장점에 대한 반론 ① <b>행정업무 경감 효과</b></div>
+    </div>
+    <div class="doc-id">CON · 05 / 18</div>
+  </div>
+
+  <div class="callout" style="margin-bottom:36px;font-size:26px">
+    선수강 폐지의 핵심 근거인 "행정업무 경감"은 <b>업무가 줄어드는 것이 아니라, 업무의 성격과 담당 부서가 이동하는 것</b>에 가깝다.
+  </div>
+
+  <div class="cols-2" style="gap:50px">
+    <div>
+      <h3 class="sub" style="margin-bottom:18px">① 정례적 학사업무라는 점</h3>
+      <p class="body">
+        해당 업무는 지난 <b>20여 년간 지속적으로 운영</b>되어 온 정례적 학사업무로서,
+        최근 들어 특별히 업무 부담이 증가하였다고 보기 어렵다.
+      </p>
+
+      <h3 class="sub" style="margin-top:32px;margin-bottom:18px">② 예방적 행정의 가치</h3>
+      <p class="body">
+        선수강 처리 과정의 <b>입력 · 확인 · 분반 조정</b>은 신입생의 필수교과목 이수를 보장하고
+        학업경로를 안정적으로 관리하기 위한 <b style="color:var(--positive)">예방적 행정</b>에 해당한다.
+      </p>
+      <ul class="body" style="margin-top:12px">
+        <li>수강신청 오류 사전 방지</li>
+        <li>필수교과목 누락 방지</li>
+        <li>졸업요건 미충족 방지</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="sub" style="margin-bottom:18px">③ 업무는 사라지지 않고 <span style="color:var(--danger)">이동</span>한다</h3>
+      <div style="background:#fff;border:1.5px solid var(--rule-dark);padding:24px 28px;margin-bottom:20px">
+        <div class="mono" style="font-size:16px;color:var(--muted);margin-bottom:10px">감소하는 업무 (단기적·중앙부서)</div>
+        <div class="body" style="font-size:20px">교무학사팀 · 교양교육원의 선수강 처리</div>
+      </div>
+      <div style="text-align:center;font-size:28px;color:var(--accent);margin:8px 0">↓</div>
+      <div style="background:#faf0ee;border:1.5px solid var(--danger);padding:24px 28px">
+        <div class="mono" style="font-size:16px;color:var(--danger);margin-bottom:10px">증가 가능한 업무 (학과·관련 부서)</div>
+        <div class="body" style="font-size:20px">개별 수강상담 · 예외처리 · 졸업요건 확인 · 민원 대응</div>
+      </div>
+
+      <div class="callout danger" style="margin-top:28px;font-size:22px">
+        <b>결과적으로</b> 행정업무를 근본적으로 줄이는 것이 아니라
+        담당 부서를 변경하는 효과에 그칠 수 있으며,
+        <b>전체 대학 차원의 행정비용은 오히려 증가</b>할 가능성도 존재한다.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.05</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 6 - 반론 2: 절대평가·학생선택권
+========================================================== -->
+<section data-screen-label="06 반론 절대평가">
+  <div class="slide-no">반론</div>
+  <div class="chrome">
+    <div>
+      <span class="pill" style="background:var(--accent)">COUNTERPOINT 02</span>
+      <div class="crumb serif" style="margin-top:10px">위 장점에 대한 반론 ② <b>절대평가 · 학생 선택권 논리</b></div>
+    </div>
+    <div class="doc-id">CON · 06 / 18</div>
+  </div>
+
+  <div class="callout" style="margin-bottom:36px;font-size:24px">
+    학생이 선호하는 시간대·분반을 직접 선택할 수 있게 됨으로써 일부 불만이 감소할 수 있다는 점은 인정된다.
+    그러나 <b>"선호의 문제"와 "필수교과 미수강의 문제"는 차원이 다르다.</b>
+  </div>
+
+  <div class="cols-2" style="gap:40px;margin-bottom:36px">
+    <div class="card warn">
+      <div class="num">선호</div>
+      <h4>수업 시간대 · 분반 선택</h4>
+      <p class="body" style="font-size:20px">
+        학생의 <b>편의와 선호</b>에 관한 문제.<br>
+        불만이 발생해도 학업 진행 자체에는 영향을 주지 않는다.
+      </p>
+    </div>
+    <div class="card negative">
+      <div class="num">본질</div>
+      <h4>필수교과목 미수강</h4>
+      <p class="body" style="font-size:20px">
+        학생의 <b>학업 진행</b>과 <b>졸업요건 충족</b>에 직접적인 영향을 미치는
+        <b style="color:var(--danger)">본질적 문제</b>.
+      </p>
+    </div>
+  </div>
+
+  <h3 class="sub" style="margin-bottom:16px">기초 교과목이 갖는 특수성</h3>
+  <p class="body" style="margin-bottom:14px">
+    <b>글쓰기 · Global English · 디지털리터러시입문 · 1학년 세미나</b> 등은 단순 선택과목이 아니라
+    <b>대학생활 적응</b>과 <b>후속 교과목 이수를 위한 기초</b> 교과목이다.
+  </p>
+  <p class="body" style="margin-bottom:14px">
+    이러한 과목의 수강이 누락될 경우 선수과목 체계에 따라 이후 학기 수강이 제한될 수 있으며,
+    결과적으로 <b>졸업 시기 지연 · 학업계획 차질 · 학생 불만 증가</b>로 이어질 수 있다.
+  </p>
+
+  <div class="callout danger" style="font-size:22px;margin-top:24px">
+    특정 분반·시간대 선호를 충족시키는 것보다 <b>필수교과목의 적기 이수를 지원</b>하는 것이
+    대학의 교육적 책무와 <b>학생 성공(Student Success)</b> 측면에서 더욱 중요하다.
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.06</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 7 - 단점 개요
+========================================================== -->
+<section data-screen-label="07 폐지의 단점 개요">
+  <div class="slide-no">02</div>
+  <div class="chrome">
+    <div>
+      <span class="pill" style="background:var(--danger)">SECTION 02 · CONS</span>
+      <div class="crumb serif" style="margin-top:10px">2. 선수강 신청 폐지의 <b>단점</b> — 8가지 위험요인</div>
+    </div>
+    <div class="doc-id">CONS · 07 / 18</div>
+  </div>
+
+  <p class="lede" style="margin-bottom:36px">
+    제도 폐지가 가져올 수 있는 부정적 영향. 단순한 행정 이슈가 아닌 <b>학생의 학업 경로 전반</b>에 작용한다.
+  </p>
+
+  <div class="cols-4" style="gap:20px">
+    <div class="card negative" style="padding:24px 26px">
+      <div class="num">가</div>
+      <h4 style="font-size:22px">필수 공통교양 미이수 증가</h4>
+      <p class="small" style="margin-top:8px">가장 큰 위험요인. 신입생이 흥미 위주·성적 따기 쉬운 과목으로 이탈</p>
+    </div>
+    <div class="card negative" style="padding:24px 26px">
+      <div class="num">나</div>
+      <h4 style="font-size:22px">선수과목 체계 붕괴</h4>
+      <p class="small" style="margin-top:8px">가장 심각한 문제. 글쓰기1 미이수 시 글쓰기2 신청 불가 → 1년 지연</p>
+    </div>
+    <div class="card negative" style="padding:24px 26px">
+      <div class="num">다</div>
+      <h4 style="font-size:22px">졸업요건 충족 지연</h4>
+      <p class="small" style="margin-top:8px">부족 학점, 추가 학기, 졸업 유예 가능성 증가</p>
+    </div>
+    <div class="card negative" style="padding:24px 26px">
+      <div class="num">라</div>
+      <h4 style="font-size:22px">신입생 민원 증가</h4>
+      <p class="small" style="margin-top:8px">민원이 사라지는 것이 아니라, 종류가 바뀌고 학과로 이동</p>
+    </div>
+    <div class="card negative" style="padding:24px 26px">
+      <div class="num">마</div>
+      <h4 style="font-size:22px">학과 행정실 업무 증가</h4>
+      <p class="small" style="margin-top:8px">중앙부서 → 학과로 업무 전가. 개별 상담·예외처리 부담</p>
+    </div>
+    <div class="card negative" style="padding:24px 26px">
+      <div class="num">바</div>
+      <h4 style="font-size:22px">신입생 적응력 저하</h4>
+      <p class="small" style="margin-top:8px">1학년 세미나 등 적응·학습법·진로설계 기능 약화</p>
+    </div>
+    <div class="card negative" style="padding:24px 26px">
+      <div class="num">사</div>
+      <h4 style="font-size:22px">중도탈락률 증가 가능성</h4>
+      <p class="small" style="margin-top:8px">신입생 충원율 민감 대학에는 매우 중요한 이슈</p>
+    </div>
+    <div class="card negative" style="padding:24px 26px">
+      <div class="num">아</div>
+      <h4 style="font-size:22px">편입생과의 경쟁 심화</h4>
+      <p class="small" style="margin-top:8px">신입생이 가장 불리한 위치에서 수강신청</p>
+    </div>
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.07</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 8 - 단점 ① 필수 공통교양 미이수
+========================================================== -->
+<section data-screen-label="08 단점 1 필수교양 미이수">
+  <div class="slide-no">가</div>
+  <div class="chrome">
+    <div>
+      <span class="pill" style="background:var(--danger)">CON · 가</span>
+      <div class="crumb serif" style="margin-top:10px">단점 ① <b>필수 공통교양 미이수 학생 증가</b></div>
+    </div>
+    <div class="doc-id">CONS · 08 / 18</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:60px">
+    <div>
+      <div class="tag danger" style="margin-bottom:24px">가장 큰 위험요인</div>
+
+      <h3 class="sub" style="margin-bottom:18px">현재 선수강 제도의 목적</h3>
+      <div class="callout navy" style="font-size:24px;margin-bottom:32px">
+        "학생이 <b>반드시 들어야 하는 과목</b>을 놓치지 않도록 하는 것"
+      </div>
+
+      <h3 class="sub" style="margin-bottom:18px">폐지 시 신입생이 처한 상황</h3>
+      <ul class="body" style="font-size:22px">
+        <li><b>졸업요건 이해 부족</b> — 어떤 과목이 필수인지 잘 모름</li>
+        <li><b>수강신청 경험 부족</b> — 처음 해보는 절차</li>
+      </ul>
+
+      <div class="callout danger" style="font-size:22px;margin-top:28px">
+        결과적으로 신입생은 필수과목보다 <b>흥미 위주 · 성적 따기 쉬운 과목</b>을 선택할 가능성이 높아진다.
+      </div>
+    </div>
+
+    <div>
+      <h3 class="sub" style="margin-bottom:18px">예상되는 미수강 과목</h3>
+      <div style="background:#fff;border:1.5px solid var(--danger);padding:28px 32px">
+        <ul style="list-style:none">
+          <li style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px dashed var(--rule)">
+            <span class="serif" style="font-size:24px;color:var(--navy);font-weight:600">글쓰기</span>
+            <span class="neg-tag">미수강 위험</span>
+          </li>
+          <li style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px dashed var(--rule)">
+            <span class="serif" style="font-size:24px;color:var(--navy);font-weight:600">Global English</span>
+            <span class="neg-tag">미수강 위험</span>
+          </li>
+          <li style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px dashed var(--rule)">
+            <span class="serif" style="font-size:24px;color:var(--navy);font-weight:600">디지털리터러시입문</span>
+            <span class="neg-tag">미수강 위험</span>
+          </li>
+          <li style="display:flex;justify-content:space-between;align-items:center;padding:14px 0">
+            <span class="serif" style="font-size:24px;color:var(--navy);font-weight:600">1학년 세미나</span>
+            <span class="neg-tag">미수강 위험</span>
+          </li>
+        </ul>
+      </div>
+
+      <p class="small" style="margin-top:24px;color:var(--muted)">
+        ※ 이들 과목은 단순 학점 취득이 아닌 <b>대학생활 적응 · 학습법 · 진로설계 · 후속 교과 기초</b> 기능을 동시에 수행하는 핵심 과목군이다.
+      </p>
+    </div>
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.08</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 9 - 단점 ② 선수과목 체계 붕괴
+========================================================== -->
+<section data-screen-label="09 단점 2 선수과목 체계">
+  <div class="slide-no">나</div>
+  <div class="chrome">
+    <div>
+      <span class="pill" style="background:var(--danger)">CON · 나 · MOST CRITICAL</span>
+      <div class="crumb serif" style="margin-top:10px">단점 ② <b>선수과목 체계 붕괴 위험</b></div>
+    </div>
+    <div class="doc-id">CONS · 09 / 18</div>
+  </div>
+
+  <div class="tag danger" style="margin-bottom:20px">가장 심각한 문제</div>
+
+  <p class="lede" style="margin-bottom:28px">
+    공통교양은 학기별로 연결된 <b>선수-후속 구조</b>를 가진다. 한 학기 미이수가 <b>학업계획 전체를 1년 이상 지연</b>시킬 수 있다.
+  </p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:50px">
+    <div>
+      <h3 class="sub" style="margin-bottom:20px">정상 흐름</h3>
+      <div class="flow">
+        <div class="step ok">1학년 1학기 · 글쓰기 1</div>
+        <div class="arrow">↓</div>
+        <div class="step ok">1학년 2학기 · 글쓰기 2 <span style="font-size:14px;color:var(--muted);font-weight:400">(글쓰기1 이수 필수)</span></div>
+      </div>
+      <p class="body" style="margin-top:24px;font-size:20px;color:var(--positive)">
+        ✓ 정상적으로 1학년 내 이수 완료
+      </p>
+    </div>
+
+    <div>
+      <h3 class="sub" style="margin-bottom:20px;color:var(--danger)">신입생이 글쓰기1을 놓칠 경우</h3>
+      <div class="flow">
+        <div class="step miss">1학년 1학기 · 미이수</div>
+        <div class="arrow" style="color:var(--danger)">↓</div>
+        <div class="step miss">1학년 2학기 · 신청 불가 (선수 미충족)</div>
+        <div class="arrow" style="color:var(--danger)">↓</div>
+        <div class="step">2학년 1학기 · 글쓰기 1 (재신청)</div>
+        <div class="arrow">↓</div>
+        <div class="step">2학년 2학기 · 글쓰기 2</div>
+      </div>
+      <div class="callout danger" style="margin-top:24px;font-size:22px">
+        ⚠ 학업계획이 <b>최소 1년 이상 지연</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.09</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 10 - 단점 ③ 졸업지연 + ④ 민원
+========================================================== -->
+<section data-screen-label="10 단점 3-4 졸업지연 민원">
+  <div class="slide-no">다·라</div>
+  <div class="chrome">
+    <div>
+      <span class="pill" style="background:var(--danger)">CON · 다 · 라</span>
+      <div class="crumb serif" style="margin-top:10px">단점 ③ <b>졸업요건 충족 지연</b> · ④ <b>신입생 민원 증가</b></div>
+    </div>
+    <div class="doc-id">CONS · 10 / 18</div>
+  </div>
+
+  <div class="cols-2" style="gap:50px">
+
+    <div>
+      <div class="tag danger">단점 ③</div>
+      <h3 class="sub" style="margin-top:16px;margin-bottom:20px">졸업요건 충족 지연</h3>
+      <p class="body" style="margin-bottom:24px">
+        앞서 본 미이수 문제가 누적되면 <b>졸업사정 시 다음과 같은 문제</b>가 발생한다.
+      </p>
+      <ul class="body" style="font-size:22px">
+        <li>부족 학점 발생</li>
+        <li>추가 학기 수강 필요</li>
+        <li>졸업 유예 가능성 증가</li>
+      </ul>
+      <div class="callout danger" style="margin-top:28px;font-size:22px">
+        특히 <b>학사경고 경험 학생</b>이나 <b>학업 적응이 약한 학생</b>에게 미치는 영향이 크다.
+      </div>
+    </div>
+
+    <div>
+      <div class="tag danger">단점 ④</div>
+      <h3 class="sub" style="margin-top:16px;margin-bottom:20px">신입생 민원 증가 (종류 변화)</h3>
+      <p class="body" style="margin-bottom:20px">
+        폐지 사유 중 하나가 "민원 감소"였지만, 실제로는 <b>민원의 종류가 바뀔 가능성</b>이 높다.
+      </p>
+
+      <div style="background:#fff;border:1.5px solid var(--rule-dark);padding:22px 26px;margin-bottom:14px">
+        <div class="mono" style="font-size:14px;color:var(--muted);margin-bottom:10px">CURRENT · 현재 민원</div>
+        <ul class="body" style="font-size:20px">
+          <li>분반 변경 요청</li>
+          <li>선수강 삭제 요청</li>
+        </ul>
+      </div>
+      <div style="text-align:center;font-size:26px;color:var(--accent);margin:6px 0">↓</div>
+      <div style="background:#faf0ee;border:1.5px solid var(--danger);padding:22px 26px">
+        <div class="mono" style="font-size:14px;color:var(--danger);margin-bottom:10px">AFTER · 폐지 후 예상 민원</div>
+        <ul class="body" style="font-size:20px">
+          <li>수강신청 못했다</li>
+          <li>필수과목 놓쳤다</li>
+          <li>졸업이 늦어진다</li>
+          <li>왜 안내 안 했냐</li>
+        </ul>
+      </div>
+
+      <p class="small" style="margin-top:18px">
+        → <b>행정부서 민원은 감소</b>하나 <b style="color:var(--danger)">학과 민원은 증가</b>할 가능성이 있음.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.10</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 11 - 단점 ⑤ 학과 행정 + ⑥ 적응력
+========================================================== -->
+<section data-screen-label="11 단점 5-6 학과업무 적응력">
+  <div class="slide-no">마·바</div>
+  <div class="chrome">
+    <div>
+      <span class="pill" style="background:var(--danger)">CON · 마 · 바</span>
+      <div class="crumb serif" style="margin-top:10px">단점 ⑤ <b>학과 행정실 업무 증가</b> · ⑥ <b>신입생 적응력 저하</b></div>
+    </div>
+    <div class="doc-id">CONS · 11 / 18</div>
+  </div>
+
+  <div class="cols-2" style="gap:50px">
+
+    <div>
+      <div class="tag danger">단점 ⑤</div>
+      <h3 class="sub" style="margin-top:16px;margin-bottom:20px">학과 행정실 업무 증가</h3>
+
+      <div style="background:#fff;border:1.5px solid var(--rule-dark);padding:22px 26px;margin-bottom:14px">
+        <div class="mono" style="font-size:14px;color:var(--muted);margin-bottom:10px">현재 (중앙부서)</div>
+        <div class="body" style="font-size:22px"><b>교무학사팀</b> → 선수강 처리</div>
+      </div>
+      <div style="text-align:center;font-size:26px;color:var(--accent);margin:6px 0">↓</div>
+      <div style="background:#faf0ee;border:1.5px solid var(--danger);padding:22px 26px">
+        <div class="mono" style="font-size:14px;color:var(--danger);margin-bottom:10px">폐지 후 (학과 행정실)</div>
+        <ul class="body" style="font-size:20px">
+          <li>개별 상담</li>
+          <li>수강지도</li>
+          <li>예외 처리</li>
+        </ul>
+      </div>
+
+      <div class="callout danger" style="margin-top:28px;font-size:22px">
+        업무가 <b>없어지는 것이 아니라</b><br>
+        <b>중앙부서 → 학과로 이동</b>할 수 있음.
+      </div>
+    </div>
+
+    <div>
+      <div class="tag danger">단점 ⑥</div>
+      <h3 class="sub" style="margin-top:16px;margin-bottom:20px">신입생 적응력 저하</h3>
+
+      <p class="body" style="margin-bottom:20px">
+        <b>1학년 세미나</b> 등의 과목은 단순 학점 취득 과목이 아니라
+        다음과 같은 통합 기능을 수행한다.
+      </p>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px">
+        <div style="background:#fbf6ec;border:1.5px solid var(--accent);padding:18px;text-align:center">
+          <div class="serif" style="font-size:22px;color:var(--accent);font-weight:700">대학생활<br>적응</div>
+        </div>
+        <div style="background:#fbf6ec;border:1.5px solid var(--accent);padding:18px;text-align:center">
+          <div class="serif" style="font-size:22px;color:var(--accent);font-weight:700">학습법<br>훈련</div>
+        </div>
+        <div style="background:#fbf6ec;border:1.5px solid var(--accent);padding:18px;text-align:center">
+          <div class="serif" style="font-size:22px;color:var(--accent);font-weight:700">진로<br>설계</div>
+        </div>
+      </div>
+
+      <div class="callout danger" style="font-size:22px">
+        이 과목들의 <b>수강 누락 시 대학 적응력이 떨어질 수 있음</b>.
+        1학년의 학사관리·학습태도 형성 기회가 사라진다.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.11</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 12 - 단점 ⑦ 중도탈락 + ⑧ 편입생 경쟁
+========================================================== -->
+<section data-screen-label="12 단점 7-8 중도탈락 편입생">
+  <div class="slide-no">사·아</div>
+  <div class="chrome">
+    <div>
+      <span class="pill" style="background:var(--danger)">CON · 사 · 아</span>
+      <div class="crumb serif" style="margin-top:10px">단점 ⑦ <b>중도탈락률 증가</b> · ⑧ <b>편입생과의 경쟁 심화</b></div>
+    </div>
+    <div class="doc-id">CONS · 12 / 18</div>
+  </div>
+
+  <div class="cols-2" style="gap:50px">
+
+    <div>
+      <div class="tag danger">단점 ⑦</div>
+      <h3 class="sub" style="margin-top:16px;margin-bottom:20px">중도탈락률 증가 가능성</h3>
+      <p class="body" style="margin-bottom:22px">
+        특히 <b>지방대학 · 신입생 충원율이 중요한 대학</b>에서는 매우 민감한 문제다.
+      </p>
+
+      <div style="background:#fff;border:1.5px solid var(--rule-dark);padding:24px;margin-bottom:24px">
+        <div class="mono" style="font-size:14px;color:var(--muted);margin-bottom:14px">CAUSAL CHAIN · 인과 사슬</div>
+        <div class="flow">
+          <div class="step miss">수강신청 실패</div>
+          <div class="arrow" style="color:var(--danger)">↓</div>
+          <div class="step miss">필수교과 누락</div>
+          <div class="arrow" style="color:var(--danger)">↓</div>
+          <div class="step miss">학업계획 차질</div>
+          <div class="arrow" style="color:var(--danger)">↓</div>
+          <div class="step miss">대학 만족도 하락</div>
+        </div>
+      </div>
+
+      <p class="small">
+        직접적인 이탈률 증가까지 단정할 수는 없지만,
+        <b>학생 만족도와 학업 적응도에는 부정적 영향</b>을 줄 가능성이 있다.
+      </p>
+    </div>
+
+    <div>
+      <div class="tag danger">단점 ⑧</div>
+      <h3 class="sub" style="margin-top:16px;margin-bottom:20px">편입생과의 경쟁 심화</h3>
+      <p class="body" style="margin-bottom:20px">
+        현재도 지적된 문제. <b>신입생의 수강신청 시기가 가장 늦기 때문</b>.
+      </p>
+
+      <div style="background:#fff;border:1.5px solid var(--rule-dark);padding:24px 28px;margin-bottom:20px">
+        <div class="mono" style="font-size:14px;color:var(--muted);margin-bottom:14px">SEQUENCE · 수강신청 순서</div>
+        <ol style="list-style:none;counter-reset:item">
+          <li style="padding:12px 0;border-bottom:1px dashed var(--rule);font-size:22px">
+            <span class="mono" style="color:var(--accent);font-weight:700;margin-right:14px">1st</span>재학생
+          </li>
+          <li style="padding:12px 0;border-bottom:1px dashed var(--rule);font-size:22px">
+            <span class="mono" style="color:var(--accent);font-weight:700;margin-right:14px">2nd</span>편입생
+          </li>
+          <li style="padding:12px 0;font-size:22px;color:var(--danger)">
+            <span class="mono" style="font-weight:700;margin-right:14px">3rd</span><b>신입생 (가장 늦음)</b>
+          </li>
+        </ol>
+      </div>
+
+      <div class="callout danger" style="font-size:22px">
+        공통교양 신청에 시간을 쓰는 사이,
+        <b>핵심교양·선택교양 확보 기회</b>가 줄어든다.<br>
+        결과적으로 <b>신입생이 가장 불리한 위치</b>에서 수강신청을 하게 된다.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.12</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 13 - 후속 대안
+========================================================== -->
+<section data-screen-label="13 후속 대안">
+  <div class="slide-no">03</div>
+  <div class="chrome">
+    <div>
+      <span class="pill">SECTION 03 · ALTERNATIVE</span>
+      <div class="crumb serif" style="margin-top:10px">3. 후속 대안의 효과 분석</div>
+    </div>
+    <div class="doc-id">ALT · 13 / 18</div>
+  </div>
+
+  <h2 class="section-title" style="margin-bottom:24px;font-size:54px">
+    "외국인 유학생에 한해서만 선수강 유지" — 효과는?
+  </h2>
+
+  <p class="lede" style="margin-bottom:40px">
+    내국인 신입생은 폐지, 외국인 유학생만 선수강을 유지하는 절충안에 대한 평가.
+  </p>
+
+  <div class="cols-2" style="gap:40px">
+    <div class="card positive">
+      <div class="num">장점</div>
+      <h4>외국인 유학생 보호 효과</h4>
+      <ul style="margin-top:8px">
+        <li><b>한국어 이해 부족</b> 문제 보완</li>
+        <li><b>학사제도 이해 부족</b> 보완</li>
+        <li>유학생의 학업 진입 안정성 확보</li>
+      </ul>
+    </div>
+
+    <div class="card negative">
+      <div class="num">단점</div>
+      <h4>구조적 한계</h4>
+      <ul style="margin-top:8px">
+        <li><b>내국인 신입생 문제는 해결되지 않음</b></li>
+        <li>앞서 본 8가지 단점 그대로 잔존</li>
+        <li>학생군 간 <b>형평성 논란</b> 발생 가능</li>
+        <li>"왜 한국 학생은 선수강이 없나" 민원</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:46px;font-size:24px">
+    <b>요약</b> · 외국인 유학생에 한해 선수강을 유지하는 방안은 <b>유학생 학업 진입에는 효과적</b>이나,
+    내국인 신입생이 직면하는 <b>필수교양 미이수·선수과목 체계 붕괴·졸업 지연</b> 문제는 그대로 남는다.
+    또한 학생군 간 형평성 논란을 새로 야기할 수 있다.
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.13</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 14 - 종합 평가표
+========================================================== -->
+<section data-screen-label="14 종합 평가">
+  <div class="slide-no">평가</div>
+  <div class="chrome">
+    <div>
+      <span class="pill">EVALUATION MATRIX</span>
+      <div class="crumb serif" style="margin-top:10px">종합 평가표 — 항목별 폐지 효과</div>
+    </div>
+    <div class="doc-id">EVAL · 14 / 18</div>
+  </div>
+
+  <table class="eval">
+    <thead>
+      <tr>
+        <th style="width:55%">평가 항목</th>
+        <th style="width:25%">폐지 효과</th>
+        <th>비고</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>행정 효율성</b></td>
+        <td><span class="pos-tag">긍정적</span></td>
+        <td>단기·중앙부서 한정</td>
+      </tr>
+      <tr>
+        <td><b>학생 선택권</b></td>
+        <td><span class="pos-tag">긍정적</span></td>
+        <td>시간표·분반 선택 자유 증가</td>
+      </tr>
+      <tr>
+        <td><b>교무학사팀 업무</b></td>
+        <td><span class="pos-tag">감소</span></td>
+        <td>입력·확인 업무 축소</td>
+      </tr>
+      <tr>
+        <td><b>교양교육원 업무</b></td>
+        <td><span class="pos-tag">감소</span></td>
+        <td>분반 조정 부담 완화</td>
+      </tr>
+      <tr>
+        <td><b>학과 행정실 업무</b></td>
+        <td><span class="warn-tag">증가 가능</span></td>
+        <td>개별 상담·예외처리 이전</td>
+      </tr>
+      <tr>
+        <td><b>필수교양 이수율</b></td>
+        <td><span class="neg-tag">하락 우려</span></td>
+        <td>흥미·평이성 위주 선택 가능</td>
+      </tr>
+      <tr>
+        <td><b>선수과목 체계 유지</b></td>
+        <td><span class="neg-tag">부정적</span></td>
+        <td>연쇄 미이수 위험</td>
+      </tr>
+      <tr>
+        <td><b>학업 경로 관리</b></td>
+        <td><span class="neg-tag">부정적</span></td>
+        <td>졸업계획 불안정성 증가</td>
+      </tr>
+      <tr>
+        <td><b>신입생 적응</b></td>
+        <td><span class="neg-tag">부정적</span></td>
+        <td>적응·학습법·진로 기능 약화</td>
+      </tr>
+      <tr>
+        <td><b>민원 발생</b></td>
+        <td><span class="warn-tag">유형 변경 후 증가 가능</span></td>
+        <td>중앙 → 학과로 이동</td>
+      </tr>
+      <tr>
+        <td><b>중도탈락 방지</b></td>
+        <td><span class="neg-tag">부정적</span></td>
+        <td>지방대학에서 특히 민감</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.14</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 15 - 결론
+========================================================== -->
+<section data-screen-label="15 결론" style="padding:0">
+  <div class="slide-no" style="top:60px;right:80px">結論</div>
+
+  <div style="padding:80px 110px 60px">
+    <div class="chrome">
+      <div>
+        <span class="pill">CONCLUSION</span>
+        <div class="crumb serif" style="margin-top:10px">결론</div>
+      </div>
+      <div class="doc-id">CONC · 15 / 18</div>
+    </div>
+
+    <h2 class="section-title" style="margin-bottom:48px;font-size:64px">
+      행정 효율성은 <span style="color:var(--positive)">타당</span>,<br>
+      그러나 부작용이 더 클 가능성이 <span style="color:var(--danger)">크다</span>.
+    </h2>
+
+    <div class="callout navy" style="font-size:26px;line-height:1.7;margin-bottom:36px">
+      선수강 제도 폐지는 행정 효율성 측면에서는 타당성이 있다.
+      그러나 현재와 같이 <b>필수교양과 선수과목 체계가 강하게 연결된 구조</b>에서는
+      다음과 같은 부작용이 더 클 가능성이 있다.
+    </div>
+
+    <div class="cols-3" style="gap:30px">
+      <div class="card negative" style="padding:24px 28px">
+        <h4 style="font-size:24px">신입생의<br>필수과목 이수 누락</h4>
+      </div>
+      <div class="card negative" style="padding:24px 28px">
+        <h4 style="font-size:24px">졸업요건<br>충족 지연</h4>
+      </div>
+      <div class="card negative" style="padding:24px 28px">
+        <h4 style="font-size:24px">민원 유형 변화 및<br>학과 부담 증가</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.15</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 16 - 교육과정·예산 리스크 ① 숨은 효과 + 시나리오
+========================================================== -->
+<section data-screen-label="16 예산 리스크 시나리오">
+  <div class="slide-no">04</div>
+  <div class="chrome">
+    <div>
+      <span class="pill" style="background:var(--accent)">SECTION 04 · CURRICULUM & BUDGET RISK</span>
+      <div class="crumb serif" style="margin-top:10px">교육과정 운영 · 예산 관리 리스크 ①</div>
+    </div>
+    <div class="doc-id">RISK · 16 / 18</div>
+  </div>
+
+  <div class="cols-2" style="gap:50px">
+
+    <div>
+      <h3 class="sub" style="margin-bottom:20px">1 · 현재 제도가 갖는 <b>숨은 효과</b></h3>
+      <p class="body" style="margin-bottom:18px">
+        선수강 제도가 있으면 대학은 <b>신입생 수를 기준으로 수강 인원을 거의 정확하게 예측</b>할 수 있다.
+      </p>
+      <div style="background:#fff;border:1.5px solid var(--positive);padding:24px 28px;margin-bottom:18px">
+        <div class="mono" style="font-size:14px;color:var(--positive);margin-bottom:14px">EXAMPLE · 신입생 1,000명 기준</div>
+        <ul style="list-style:none">
+          <li style="padding:6px 0;font-size:20px"><b>글쓰기 1</b> &nbsp;: &nbsp;1,000명</li>
+          <li style="padding:6px 0;font-size:20px"><b>Global English</b> &nbsp;: &nbsp;1,000명</li>
+          <li style="padding:6px 0;font-size:20px"><b>디지털리터러시입문</b> &nbsp;: &nbsp;1,000명</li>
+        </ul>
+      </div>
+      <p class="small">
+        → <b>강좌 수 · 강의실 배정 · 담당교원 배정 · 강사료 예산</b>을 안정적으로 계획 가능.
+      </p>
+
+      <h3 class="sub" style="margin-top:36px;margin-bottom:16px">2 · 폐지 시 발생 가능한 문제</h3>
+      <p class="body" style="font-size:20px">
+        수요 예측이 불가능해지면 <b>분반 개설 규모 산정</b>이 어려워지고
+        다음의 두 가지 시나리오 모두에서 비효율이 발생한다.
+      </p>
+    </div>
+
+    <div>
+      <div class="scenario s1" style="margin-bottom:24px">
+        <div class="stitle">📈 시나리오 1 · 과다 개설</div>
+        <div class="flow" style="font-size:17px">
+          <div class="step">학교, 혹시 모를 수요 대비 → 글쓰기1 <b>40개 분반</b> 개설</div>
+          <div class="arrow">↓</div>
+          <div class="step">실제 신청 <b>30개 분반</b> 수준</div>
+          <div class="arrow">↓</div>
+          <div class="step miss">10개 분반 정원 미달</div>
+          <div class="arrow" style="color:var(--danger)">↓</div>
+          <div class="step miss"><b>강의실 · 강사료 낭비</b></div>
+        </div>
+      </div>
+
+      <div class="scenario s2">
+        <div class="stitle">📉 시나리오 2 · 과소 개설</div>
+        <div class="flow" style="font-size:17px">
+          <div class="step">학교, "작년 미신청이 많았으니 줄이자" → <b>30개 분반</b></div>
+          <div class="arrow">↓</div>
+          <div class="step">실제 신청 <b>38개 분반</b> 규모</div>
+          <div class="arrow" style="color:var(--danger)">↓</div>
+          <div class="step miss">수강신청 대란 · 증원 요구</div>
+          <div class="arrow" style="color:var(--danger)">↓</div>
+          <div class="step miss">추가 분반 긴급 개설 · <b>행정 혼란</b></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.16</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 17 - 리스크 ② 누적 미수강자 + 재정 + 대학평가
+========================================================== -->
+<section data-screen-label="17 누적 미수강 재정">
+  <div class="slide-no">04</div>
+  <div class="chrome">
+    <div>
+      <span class="pill" style="background:var(--accent)">SECTION 04 · CURRICULUM & BUDGET RISK</span>
+      <div class="crumb serif" style="margin-top:10px">교육과정 운영 · 예산 관리 리스크 ②</div>
+    </div>
+    <div class="doc-id">RISK · 17 / 18</div>
+  </div>
+
+  <div class="cols-2" style="gap:50px">
+
+    <div>
+      <h3 class="sub" style="margin-bottom:18px">3 · 장기적으로 더 심각한 문제 — <b>누적 미수강자</b></h3>
+      <div style="background:#fff;border:1.5px solid var(--danger);padding:22px 26px;margin-bottom:18px">
+        <div class="mono" style="font-size:14px;color:var(--danger);margin-bottom:14px">ACCUMULATION · 학번별 미이수 누적</div>
+        <ul style="list-style:none">
+          <li style="padding:6px 0;font-size:20px">2027학번 · <b style="color:var(--danger)">100명 미이수</b></li>
+          <li style="padding:6px 0;font-size:20px">2028학번 · <b style="color:var(--danger)">120명 미이수</b></li>
+          <li style="padding:6px 0;font-size:20px">2029학번 · <b style="color:var(--danger)">150명 미이수</b></li>
+        </ul>
+      </div>
+      <p class="small">
+        글쓰기1 수요 = <b>신입생 수요 + 재수강 수요 + 미이수 수요</b>가 섞임 → 예측이 매우 어려워진다.
+      </p>
+
+      <h3 class="sub" style="margin-top:32px;margin-bottom:16px">4 · 교양교육원 입장에서의 난점</h3>
+      <div class="cols-2" style="gap:14px">
+        <div style="background:#f1f7f3;border:1.5px solid var(--positive);padding:16px;text-align:center">
+          <div class="mono" style="font-size:13px;color:var(--positive);margin-bottom:6px">CURRENT</div>
+          <div class="serif" style="font-size:20px;color:var(--positive);font-weight:700">신입생 수<br>≒ 수강인원</div>
+        </div>
+        <div style="background:#faf0ee;border:1.5px solid var(--danger);padding:16px;text-align:center">
+          <div class="mono" style="font-size:13px;color:var(--danger);margin-bottom:6px">AFTER</div>
+          <div class="serif" style="font-size:20px;color:var(--danger);font-weight:700">신입생 수<br>≠ 수강인원</div>
+        </div>
+      </div>
+      <p class="small" style="margin-top:14px">
+        예: 신입생 3,000명 → 글쓰기1 신청자가 2,500명일 수도, 3,200명일 수도 있음 (상급학년 미이수자 포함). <b>교과 운영이 불안정해진다.</b>
+      </p>
+    </div>
+
+    <div>
+      <h3 class="sub" style="margin-bottom:16px">5 · 재정적 측면</h3>
+      <p class="body" style="margin-bottom:14px;font-size:20px">
+        분반 하나 운영 시 발생 비용: <b>강사료 · 강의실 운영비 · 조교 지원 · 행정 지원</b>
+      </p>
+      <div style="background:#faf5e6;border-left:6px solid var(--warn);padding:20px 26px;margin-bottom:14px">
+        <div class="body" style="font-size:20px">
+          정원 30명 기준에서 <b>15명만 수강하는 분반</b>이 여러 개 생기면
+          → <b>상당한 비효율</b>
+        </div>
+      </div>
+      <div style="background:#faf0ee;border-left:6px solid var(--danger);padding:20px 26px">
+        <div class="body" style="font-size:20px">
+          반대로 수요 예측 실패로 <b>추가 분반</b>을 열면
+          → <b>예산을 추가 확보</b>해야 함
+        </div>
+      </div>
+
+      <h3 class="sub" style="margin-top:32px;margin-bottom:16px">6 · 대학평가와의 연관</h3>
+      <p class="body" style="margin-bottom:14px;font-size:20px">
+        최근 대학평가의 주요 관리 지표:
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px">
+        <div style="background:#fff;border:1.5px solid var(--rule-dark);padding:12px 16px;font-size:18px">전공 이수율</div>
+        <div style="background:#fff;border:1.5px solid var(--rule-dark);padding:12px 16px;font-size:18px">졸업요건 충족률</div>
+        <div style="background:#fff;border:1.5px solid var(--rule-dark);padding:12px 16px;font-size:18px">중도탈락률</div>
+        <div style="background:#fff;border:1.5px solid var(--rule-dark);padding:12px 16px;font-size:18px">재학기간</div>
+      </div>
+      <div class="callout danger" style="font-size:20px">
+        필수교양 미이수 누적 → <b>졸업지연 증가 · 수업운영 비효율 · 학생 만족도 하락</b>으로 이어질 수 있다.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획</span><span>p.17</span></div>
+</section>
+
+<!-- =========================================================
+SLIDE 18 - 행정실 의견서 추가 문구
+========================================================== -->
+<section data-screen-label="18 의견서 문구">
+  <div class="slide-no">제언</div>
+  <div class="chrome">
+    <div>
+      <span class="pill" style="background:var(--navy)">RECOMMENDED LANGUAGE</span>
+      <div class="crumb serif" style="margin-top:10px">행정실 의견서에 추가할 수 있는 문구 (예시)</div>
+    </div>
+    <div class="doc-id">FINAL · 18 / 18</div>
+  </div>
+
+  <p class="lede" style="margin-bottom:32px">
+    교무위원회 논의에 활용 가능한 <b>공식 의견서 문안</b>. 단순한 학생 불편 차원이 아닌,
+    <b>대학의 교육과정 운영 안정성과 재정 효율성</b> 문제로 프레이밍한다.
+  </p>
+
+  <div style="background:#fff;border:2px solid var(--navy);padding:48px 56px;position:relative">
+    <div style="position:absolute;top:-18px;left:40px;background:var(--navy);color:var(--paper);padding:6px 18px;font-family:'Noto Serif KR',serif;font-weight:700;letter-spacing:0.1em">
+      의 견 서 · 추 가 문 구
+    </div>
+
+    <p class="serif" style="font-size:23px;line-height:1.85;color:#1a1d24;margin-bottom:20px;text-indent:1em">
+      선수강 신청 제도 폐지 시 신입생의 필수교양 수강 여부를 사전에 확정할 수 없어
+      <b>교과목 수요 예측의 정확성이 크게 저하될 우려</b>가 있음.
+    </p>
+    <p class="serif" style="font-size:23px;line-height:1.85;color:#1a1d24;margin-bottom:20px;text-indent:1em">
+      이에 따라 분반 개설 규모 산정이 어려워지고,
+      <b>과다 개설 시 강의 운영 및 예산 낭비</b>가 발생할 수 있으며,
+      <b>과소 개설 시 수강신청 혼란과 추가 분반 개설에 따른 행정 부담</b>이 증가할 수 있음.
+    </p>
+    <p class="serif" style="font-size:23px;line-height:1.85;color:#1a1d24;text-indent:1em">
+      또한 필수교양 미이수 학생이 누적될 경우 향후 학년별 수요가 혼재되어
+      <b>중장기적인 교과 운영 계획 수립이 어려워지고</b>,
+      이에 따른 <b>교육자원 배분의 비효율성</b>이 발생할 가능성이 있음.
+    </p>
+  </div>
+
+  <div class="callout navy" style="margin-top:32px;font-size:22px">
+    <b>활용 포인트</b> · 이 논점은 단순한 "학생 불편" 수준이 아니라
+    대학의 <b>교육과정 운영 안정성</b>과 <b>재정 효율성</b> 문제이므로,
+    교무위원회 논의에서도 상당히 설득력 있는 <b>반대 또는 보완 논거</b>가 될 수 있다.
+  </div>
+
+  <div class="footer"><span>선수강 폐지 검토 · 학사기획 · 끝</span><span>p.18 / 18</span></div>
+</section>
+
+</deck-stage>
+</body>
+</html>
